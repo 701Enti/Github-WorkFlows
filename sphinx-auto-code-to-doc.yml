@@ -11,6 +11,10 @@ on:
         description: "document repository"
         require: true
         type: string
+      BRANCH_NAME:
+        description: "the branch name get by env"
+        require: true
+        type: string
     secrets:
       docRepoSecret:
         require: true
@@ -49,6 +53,8 @@ run: |
 cp -r docs/build/html/* ${{ inputs.docRepo }}
 
 - name: Push changes to docs repository
+env:
+  BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
 run: |
 cd ${{ inputs.docRepo }}
 git config user.name "github-actions[bot]"
@@ -58,5 +64,5 @@ if git diff-index --quiet HEAD; then
 echo "No changes to commit"
 else
 git commit -m "Update documentation"
-git push
+git push origin $BRANCH_NAME
 fi
