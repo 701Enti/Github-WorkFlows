@@ -38,7 +38,6 @@ jobs:
 
     - name: Build Sphinx documentation
       run: |
-        mkdir docs
         cd docs
         make html
 
