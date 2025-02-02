@@ -35,11 +35,9 @@ jobs:
     - name: Doxygen Run
       run: doxygen
 
-    - name: Set git config
+    - name: Show variables
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        
+        echo "${{ inputs.docRepo }}"
 
     - name: Checkout docs repository
       uses: actions/checkout@v3
@@ -56,6 +54,8 @@ jobs:
         BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
       run: |
         cd ${{ inputs.docRepo }}
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
         git add .
         if git diff-index --quiet HEAD; then
         echo "No changes to commit"
