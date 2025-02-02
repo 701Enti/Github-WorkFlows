@@ -33,9 +33,7 @@ jobs:
       run: sudo apt-get install doxygen
 
     - name: Doxygen Run
-      run: |
-        tree
-        doxygen
+      run: doxygen
 
     - name: Checkout docs repository
       uses: actions/checkout@v3
