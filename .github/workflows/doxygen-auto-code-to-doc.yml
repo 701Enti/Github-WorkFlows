@@ -33,7 +33,7 @@ jobs:
         echo "${{ inputs.BRANCH_NAME }}"
 
     - name: Checkout docs repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docRepo }}
         token: ${{ secrets.DOC_REPO_SYNC_SECRET }}
