@@ -34,6 +34,7 @@ jobs:
     - name: Show variables
       run: |
         echo "${{ inputs.docRepo }}"
+        echo "${{ inputs.BRANCH_NAME }}"
 
     - name: Checkout docs repository
       uses: actions/checkout@v3
