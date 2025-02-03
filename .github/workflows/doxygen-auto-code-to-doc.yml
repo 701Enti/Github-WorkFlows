@@ -44,7 +44,9 @@ jobs:
         path: ${{ inputs.docRepo }}
 
     - name: Copy built docs to docs repository
-      run: cp -r /docs/doxygen ${{ inputs.docRepo }}
+      run: |
+        tree
+        cp -r docs/doxygen ${{ inputs.docRepo }}
 
     - name: Push changes to docs repository
       env:
