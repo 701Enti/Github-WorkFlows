@@ -32,9 +32,9 @@ jobs:
 
     - name: Show variables
       run: |
-        cd..
         echo "${{ inputs.docRepo }}"
         echo "${{ inputs.BRANCH_NAME }}"
+        echo "${{ secrets.docRepoSecret }}"
 
     - name: Checkout docs repository
       uses: actions/checkout@v3
