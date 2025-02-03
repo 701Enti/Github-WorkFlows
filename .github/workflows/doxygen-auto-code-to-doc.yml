@@ -48,6 +48,7 @@ jobs:
 
     - name: Push changes to docs repository
       env:
+        GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
         BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
       run: |
         cd ${{ inputs.docRepo }}
