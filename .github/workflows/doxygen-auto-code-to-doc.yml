@@ -53,6 +53,7 @@ jobs:
         cd ${{ inputs.docRepo }}
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
+        git checkout -b $BRANCH_NAME
         git add .
         if git diff-index --quiet HEAD; then
         echo "No changes to commit"
