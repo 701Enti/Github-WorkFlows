@@ -10,6 +10,10 @@ on:
         description: "the branch name get by env"
         required: true
         type: string
+    secrets:
+      docRepoSecret:
+        required: true
+       
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,7 +40,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docRepo }}
-        token: ${{ secrets.ORG_DOC_SYNC_SECRET }}
+        token: ${{ secrets.docRepoSecret }}
         path: ${{ inputs.docRepo }}
 
     - name: Copy built docs to docs repository
