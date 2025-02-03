@@ -51,7 +51,7 @@ jobs:
         fi
 
     - name: Checkout docs repository
-      if: steps.check-branch.outputs.branch_exists = 'false'
+      if: steps.check-branch.outputs.branch_exists = "false"
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docRepo }}
@@ -59,7 +59,7 @@ jobs:
         path: ${{ inputs.docRepo }}
 
     - name: Checkout docs repository
-      if: steps.check-branch.outputs.branch_exists = 'true'
+      if: steps.check-branch.outputs.branch_exists = "true"
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docRepo }}
@@ -71,7 +71,7 @@ jobs:
       run: cp -r docs/doxygen ${{ inputs.docRepo }}
 
     - name: Push changes to docs repository
-      if: steps.check-branch.outputs.branch_exists = 'false'
+      if: steps.check-branch.outputs.branch_exists = "false"
       env:
         GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
         BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
@@ -89,7 +89,7 @@ jobs:
         fi
 
     - name: Push changes to docs repository
-      if: steps.check-branch.outputs.branch_exists = 'true'
+      if: steps.check-branch.outputs.branch_exists = "true"
       env:
         GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
         BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
