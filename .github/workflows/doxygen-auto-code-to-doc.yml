@@ -17,9 +17,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    outputs:
+      branch_exists : ${{ steps.check-branch.outputs.branch_exists }}
     steps: 
-
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
@@ -44,34 +44,28 @@ jobs:
       run: |
         if git rev-parse --verify "origin/$BRANCH_NAME" > /dev/null 2>&1; then
         echo "Branch exists"
-        echo "branch_exists=true" >> $GITHUB_ENV
+        echo "branch_exists=true" >> $GITHUB_OUTPUT
         else
         echo "Branch does not exist"
-        echo "branch_exists=false" >> $GITHUB_ENV
+        echo "branch_exists=false" >> $GITHUB_OUTPUT
         fi
 
+  exists_false:
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.outputs.branch_exists = 'false'
+    steps: 
     - name: Checkout docs repository
-      if: ENV.branch_exists = 'false'
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docRepo }}
         token: ${{ secrets.docRepoSecret }}
         path: ${{ inputs.docRepo }}
-
-    - name: Checkout docs repository
-      if: ENV.branch_exists = 'true'
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ inputs.docRepo }}
-        token: ${{ secrets.docRepoSecret }}
-        path: ${{ inputs.docRepo }}
-        ref: ${{ inputs.BRANCH_NAME }}
 
     - name: Copy built docs to docs repository
       run: cp -r docs/doxygen ${{ inputs.docRepo }}
 
     - name: Push changes to docs repository
-      if: ENV.branch_exists = 'false'
       env:
         GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
         BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
@@ -88,8 +82,23 @@ jobs:
         git push -u origin $BRANCH_NAME
         fi
 
+  exists_true:
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.outputs.branch_exists = 'true'
+    steps: 
+    - name: Checkout docs repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.docRepo }}
+        token: ${{ secrets.docRepoSecret }}
+        path: ${{ inputs.docRepo }}
+        ref: ${{ inputs.BRANCH_NAME }}
+
+    - name: Copy built docs to docs repository
+      run: cp -r docs/doxygen ${{ inputs.docRepo }}
+
     - name: Push changes to docs repository
-      if: ENV.branch_exists = 'true'
       env:
         GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
         BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
