@@ -45,7 +45,7 @@ jobs:
         TARGET_REPO: ${{ inputs.docRepo }}
         BRANCH_NAME: "${{ inputs.BRANCH_NAME }}"
       run: |
-        branch_exists = $(git ls-remote --heads https://github.com/${TARGET_REPO}.git $BRANCH_NAME)
+        branch_exists=$(git ls-remote --heads https://github.com/${TARGET_REPO}.git $BRANCH_NAME)
         if [ -n "$branch_exists" ]; then
           echo "Branch exists"
           echo "branch_exists=true" >> $GITHUB_OUTPUT
