@@ -3,10 +3,6 @@ name: Sphinx Auto Code To Document
 on:
   workflow_call:
     inputs:
-      codeRepo:
-        description: "code repository"
-        required: true
-        type: string
       docRepo:
         description: "document repository"
         required: true
