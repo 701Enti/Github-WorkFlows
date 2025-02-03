@@ -36,7 +36,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.docRepo }}
-        token: ${{ secrets.DOC_REPO_SYNC_SECRET }}
+        token: ${{ secrets.ORG_DOC_SYNC }}
         path: ${{ inputs.docRepo }}
 
     - name: Copy built docs to docs repository
