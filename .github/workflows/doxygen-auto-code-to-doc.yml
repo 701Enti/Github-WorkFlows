@@ -1,5 +1,4 @@
-name: Sphinx Auto Code To Document
-
+name: DoxygenAutoCodeToDoc
 on:
   workflow_call:
     inputs:
@@ -33,6 +32,7 @@ jobs:
 
     - name: Show variables
       run: |
+        cd..
         echo "${{ inputs.docRepo }}"
         echo "${{ inputs.BRANCH_NAME }}"
 
