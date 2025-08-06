@@ -13,119 +13,119 @@ on:
     secrets:
       docRepoSecret:
         required: true
-       
+
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      branch_exists : ${{ steps.check-branch.outputs.branch_exists }}
-    steps: 
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: artifact
-    
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install doxygen
-        sudo apt install graphviz
+      branch_exists: ${{ steps.check-branch.outputs.branch_exists }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: codefile
 
-    - name: Doxygen Run
-      run: doxygen
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install doxygen
+          sudo apt install graphviz
 
-    - name: Show variables
-      run: |
-        echo "${{ inputs.docRepo }}"
-        echo "${{ inputs.BRANCH_NAME }}"
+      - name: Doxygen Run
+        run: doxygen
 
-    - name: Check if branch exists
-      id: check-branch
-      env:
-        TARGET_REPO: ${{ inputs.docRepo }}
-        BRANCH_NAME: "${{ inputs.BRANCH_NAME }}"
-      run: |
-        branch_exists=$(git ls-remote --heads https://github.com/${TARGET_REPO}.git $BRANCH_NAME)
-        if [ -n "$branch_exists" ]; then
-          echo "Branch exists"
-          echo "branch_exists=true" >> $GITHUB_OUTPUT
-        else
-          echo "Branch does not exist"
-          echo "branch_exists=false" >> $GITHUB_OUTPUT
-        fi
+      - name: Show variables
+        run: |
+          echo "${{ inputs.docRepo }}"
+          echo "${{ inputs.BRANCH_NAME }}"
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: A2
-        path: ./
+      - name: Check if branch exists
+        id: check-branch
+        env:
+          TARGET_REPO: ${{ inputs.docRepo }}
+          BRANCH_NAME: "${{ inputs.BRANCH_NAME }}"
+        run: |
+          branch_exists=$(git ls-remote --heads https://github.com/${TARGET_REPO}.git $BRANCH_NAME)
+          if [ -n "$branch_exists" ]; then
+            echo "Branch exists"
+            echo "branch_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Branch does not exist"
+            echo "branch_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: workplace
+          path: ./
 
   exists_false:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ needs.build.outputs.branch_exists == 'false' }}
-    steps: 
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: A2
-    
-    - name: Checkout docs repository
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ inputs.docRepo }}
-        token: ${{ secrets.docRepoSecret }}
-        path: ${{ inputs.docRepo }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: workplace
 
-    - name: Copy built docs to docs repository
-      run: cp -r docs/doxygen ${{ inputs.docRepo }}
+      - name: Checkout docs repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.docRepo }}
+          token: ${{ secrets.docRepoSecret }}
+          path: ${{ inputs.docRepo }}
 
-    - name: Push changes to docs repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
-        BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
-      run: |
-        cd ${{ inputs.docRepo }}
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git checkout -b $BRANCH_NAME
-        git add .
-        git commit -m "Update documentation"
-        git push -u origin $BRANCH_NAME
+      - name: Copy built docs to docs repository
+        run: cp -r docs/doxygen ${{ inputs.docRepo }}
+
+      - name: Push changes to docs repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
+          BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
+        run: |
+          cd ${{ inputs.docRepo }}
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b $BRANCH_NAME
+          git add .
+          git commit -m "Update documentation"
+          git push -u origin $BRANCH_NAME
 
   exists_true:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ needs.build.outputs.branch_exists == 'true' }}
-    steps: 
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: A2
-        
-    - name: Checkout docs repository
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ inputs.docRepo }}
-        token: ${{ secrets.docRepoSecret }}
-        path: ${{ inputs.docRepo }}
-        ref: ${{ inputs.BRANCH_NAME }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: workplace
 
-    - name: Copy built docs to docs repository
-      run: cp -r docs/doxygen ${{ inputs.docRepo }}
+      - name: Checkout docs repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.docRepo }}
+          token: ${{ secrets.docRepoSecret }}
+          path: ${{ inputs.docRepo }}
+          ref: ${{ inputs.BRANCH_NAME }}
 
-    - name: Push changes to docs repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
-        BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
-      run: |
-        cd ${{ inputs.docRepo }}
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add .
-        if git diff-index --quiet HEAD; then
-          echo "No changes to commit"
-        else
-          git commit -m "Update documentation"
-          git push -u origin $BRANCH_NAME
-        fi
+      - name: Copy built docs to docs repository
+        run: cp -r docs/doxygen ${{ inputs.docRepo }}
+
+      - name: Push changes to docs repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.docRepoSecret }}
+          BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
+        run: |
+          cd ${{ inputs.docRepo }}
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update documentation"
+            git push -u origin $BRANCH_NAME
+          fi
