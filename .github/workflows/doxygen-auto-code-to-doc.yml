@@ -2,12 +2,12 @@
 # This workflow file is dedicated to the public domain under CC0 1.0.
 # See https://creativecommons.org/publicdomain/zero/1.0/
 # -------------------------------------------------------------------
-name: DoxygenAutoCodeToDoc
+name: doxygen-auto-code-to-doc
 on:
   workflow_call:
     inputs:
       docRepo:
-        description: "document repository"
+        description: "document repository path include owner like owner/repo"
         required: true
         type: string
       BRANCH_NAME:
