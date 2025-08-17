@@ -61,7 +61,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: workplace
+          name: workplace_with_new_doc
           path: ./
 
   exists_false:
@@ -72,7 +72,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: workplace
+          name: workplace_with_new_doc
 
       - name: Checkout docs repository
         uses: actions/checkout@v4
@@ -105,7 +105,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: workplace
+          name: workplace_with_new_doc
 
       - name: Checkout docs repository
         uses: actions/checkout@v4
