@@ -138,7 +138,10 @@ jobs:
           cd ${{ inputs.docRepo }}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git update-index --really-refresh
+          git status
           git add .
+          git status
           if git diff-index --quiet HEAD; then
             echo "No changes to commit"
           else
