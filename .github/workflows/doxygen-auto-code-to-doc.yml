@@ -84,9 +84,16 @@ jobs:
       - name: Show all directory before copy
         run: find . -type d
         
-      - name: Copy built docs to docs repository
-        run: find docs/doxygen -type f \( ! -path "*/.git/*" ! -path "*/.git" \) -print0 | xargs -0 -I{} cp -af --remove-destination --no-preserve=ownership {} "$(realpath "${{ inputs.docRepo }}/doxygen")/"
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
 
+      - name: Sync doxygen docs
+        run: |
+          rsync -av --delete \
+            --exclude='.git' \
+            docs/doxygen/ \
+            "${{ inputs.docRepo }}/doxygen/"
+            
       - name: Show all directory after copy
         run: find . -type d
 
@@ -133,8 +140,15 @@ jobs:
       - name: Show all directory before copy
         run: find . -type d
         
-      - name: Copy built docs to docs repository
-        run: find docs/doxygen -type f \( ! -path "*/.git/*" ! -path "*/.git" \) -print0 | xargs -0 -I{} cp -af --remove-destination --no-preserve=ownership {} "$(realpath "${{ inputs.docRepo }}/doxygen")/"
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
+      - name: Sync doxygen docs
+        run: |
+          rsync -av --delete \
+            --exclude='.git' \
+            docs/doxygen/ \
+            "${{ inputs.docRepo }}/doxygen/"
 
       - name: Show all directory after copy
         run: find . -type d
