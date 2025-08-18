@@ -129,8 +129,14 @@ jobs:
           path: ${{ inputs.docRepo }}
           ref: ${{ inputs.BRANCH_NAME }}
 
+      - name: Show all directory before copy
+        run: find . -type d
+        
       - name: Copy built docs to docs repository
-        run: cp -r docs/doxygen ${{ inputs.docRepo }}
+        run: find docs/doxygen -type f \( ! -path "*/.git/*" ! -path "*/.git" \) -exec cp -a --parents {} ${{ inputs.docRepo }} +
+
+      - name: Show all directory after copy
+        run: find . -type d
 
       - name: Upload artifact with doc_repo git
         uses: actions/upload-artifact@v4
