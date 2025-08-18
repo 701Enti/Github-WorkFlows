@@ -90,7 +90,7 @@ jobs:
           name: before_doc_repo_push
           path: |
             **
-            ./${{ inputs.docRepo }}/.git/**
+            ${{ inputs.docRepo }}/.git/**
 
       - name: Push changes to docs repository
         env:
@@ -132,7 +132,7 @@ jobs:
           name: before_doc_repo_push
           path: |
             **
-            ./${{ inputs.docRepo }}/.git/**
+            ${{ inputs.docRepo }}/.git/**
 
       - name: Push changes to docs repository
         env:
