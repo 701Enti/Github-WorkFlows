@@ -64,7 +64,7 @@ jobs:
           name: doxygen_run_done
           path: |
             **
-            ./git/**
+            .git/**
 
   exists_false:
     runs-on: ubuntu-latest
@@ -90,7 +90,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: before_doc_repo_push
-          path: ./
+          path: |
+            **
+            .git/**
 
       - name: Push changes to docs repository
         env:
@@ -130,7 +132,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: before_doc_repo_push
-          path: ./
+          path: |
+            **
+            .git/**
 
       - name: Push changes to docs repository
         env:
