@@ -58,13 +58,11 @@ jobs:
             echo "branch_exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Upload artifact with .git
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: doxygen_run_done
-          path: |
-            **
-            .git/**
+          path: ./
 
   exists_false:
     runs-on: ubuntu-latest
@@ -86,13 +84,13 @@ jobs:
       - name: Copy built docs to docs repository
         run: cp -r docs/doxygen ${{ inputs.docRepo }}
 
-      - name: Upload artifact
+      - name: Upload artifact with doc_repo git
         uses: actions/upload-artifact@v4
         with:
           name: before_doc_repo_push
           path: |
             **
-            .git/**
+            ./${{ inputs.docRepo }}/.git/**
 
       - name: Push changes to docs repository
         env:
@@ -128,13 +126,13 @@ jobs:
       - name: Copy built docs to docs repository
         run: cp -r docs/doxygen ${{ inputs.docRepo }}
 
-      - name: Upload artifact
+      - name: Upload artifact with doc_repo git
         uses: actions/upload-artifact@v4
         with:
           name: before_doc_repo_push
           path: |
             **
-            .git/**
+            ./${{ inputs.docRepo }}/.git/**
 
       - name: Push changes to docs repository
         env:
